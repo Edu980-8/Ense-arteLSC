@@ -1,6 +1,7 @@
 from sqlmodel import Session, create_engine, select
 
 from app.models.categories import Category
+from app.models.signs import Sign
 from app.services import users
 from app.config.settings import settings
 from app.models.users import User, UserCreate
@@ -14,14 +15,7 @@ engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
 
 
 def init_db(session: Session) -> None:
-    # Tables should be created with Alembic migrations
-    # But if you don't want to use migrations, create
-    # the tables un-commenting the next lines
-    # from sqlmodel import SQLModel
-
-    # This works because the models are already imported and registered from app.models
-    # SQLModel.metadata.create_all(engine)
-
+    # 1. Crear superusuario si no existe
     user = session.exec(
         select(User).where(User.email == settings.FIRST_SUPERUSER)
     ).first()
@@ -33,7 +27,7 @@ def init_db(session: Session) -> None:
         )
         user = users.create_user(session=session, user_create=user_in)
 
-    # Unique course categories (in Spanish)
+    # 2. Crear categorías únicas si no existen
     unique_categories = [
         "Familia",
         "Actividades",
@@ -48,8 +42,49 @@ def init_db(session: Session) -> None:
             select(Category).where(Category.value == category_value)
         ).first()
         if not existing_category:
-            new_category = Category(value=category_value, medal_image_url="https://example.com/medal.png")
+            new_category = Category(
+                value=category_value,
+                medal_image_url="https://example.com/medal.png"
+            )
             session.add(new_category)
-    
+
+    session.commit()  # Confirmar categorías antes de usarlas en relaciones
+
+    # 3. Crear señas iniciales si no existen
+    initial_signs = [
+        {"name": "MAMÁ", "category": "Familia", "description": "Descripción del curso 1"},
+        {"name": "PAPÁ", "category": "Familia", "description": "Descripción del curso 2"},
+        {"name": "JUGAR", "category": "Actividades", "description": "Descripción del curso 3"},
+        {"name": "COMER", "category": "Necesidades", "description": "Descripción del curso 3"},
+        {"name": "HAMBRE", "category": "Necesidades", "description": "Descripción del curso 3"},
+        {"name": "FELIZ", "category": "Emociones", "description": "Descripción del curso 3"},
+        {"name": "TRISTE", "category": "Emociones", "description": "Descripción del curso 3"},
+        {"name": "HOLA", "category": "Sociales", "description": "Descripción del curso 3"},
+        {"name": "GRACIAS", "category": "Sociales", "description": "Descripción del curso 3"},
+        {"name": "YO", "category": "Pronombres", "description": "Descripción del curso 3"},
+        {"name": "TÚ", "category": "Pronombres", "description": "Descripción del curso 3"},
+        {"name": "ABUELO", "category": "Familia", "description": "Descripción del curso 3"},
+        {"name": "TE AMO", "category": "Sociales", "description": "Descripción del curso 3"},
+        {"name": "SED", "category": "Necesidades", "description": "Descripción del curso 3"},
+        {"name": "POR FAVOR", "category": "Sociales", "description": "Descripción del curso 3"},
+    ]
+
+    for sign_data in initial_signs:
+        existing_sign = session.exec(
+            select(Sign).where(Sign.name == sign_data["name"])
+        ).first()
+        if not existing_sign:
+            category = session.exec(
+                select(Category).where(Category.value == sign_data["category"])
+            ).first()
+            if category:
+                new_sign = Sign(
+                    name=sign_data["name"],
+                    description=sign_data["description"],
+                    url_video="https://example.com/video_placeholder.mp4",  # Reemplaza con URL real si la tienes
+                    category=category,
+                )
+                session.add(new_sign)
+
     session.commit()
     session.close()

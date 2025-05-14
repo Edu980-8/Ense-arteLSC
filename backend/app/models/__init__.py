@@ -11,7 +11,7 @@ from app.models.users import (
     NewPassword
 )
 from app.models.categories import Category
-from app.models.signs import Sign
+from app.models.signs import Sign, SignPublic, SignsPublic
 from app.models.medals import Medal
 from app.models.user_signs import UserSign
 from app.models.token import TokenPayload, Token

@@ -14,6 +14,14 @@ class SignBase(SQLModel):
     description: str | None = None
     url_video: str
 
+# Properties to return via API, id is always required
+class SignPublic(SignBase):
+    id: uuid.UUID
+
+class SignsPublic(SQLModel):
+    data: list[SignPublic]
+    count: int
+
 class Sign(SignBase, table=True):
     __tablename__ = "signs"
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
