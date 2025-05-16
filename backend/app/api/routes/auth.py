@@ -5,8 +5,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
 
-from app.crud.auth import authenticate
-from app.crud.user import get_user_by_email
+
+from app.crud import get_user_by_email, authenticate
 from app.api.deps import CurrentUser, SessionDep, get_current_active_superuser
 from app.config import security
 from app.config.settings import settings

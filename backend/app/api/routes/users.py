@@ -24,6 +24,7 @@ from app.models import (
     UserUpdate,
     UserUpdateMe,
 )
+from app.models.medals import Medal, MedalsPublic
 from app.utils.email import generate_new_account_email, send_email
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -171,6 +172,33 @@ def read_user_by_id(
             detail="The user doesn't have enough privileges",
         )
     return user
+
+@router.get("/{user_id}/medals", response_model=MedalsPublic)
+def read_user_medals(
+    user_id: uuid.UUID,
+    session: SessionDep,
+    current_user: CurrentUser
+) -> Any:
+    """
+    Retrieve medals for a specific user.
+    Only the user or a superuser can access this data.
+    """
+    user = session.get(User, user_id)
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if user != current_user and not current_user.is_superuser:
+        raise HTTPException(
+            status_code=403,
+            detail="The user doesn't have enough privileges",
+        )
+
+    statement = select(Medal).where(Medal.user_id == user_id)
+    medals = session.exec(statement).all()
+    count = len(medals)
+
+    return MedalsPublic(data=medals, count=count)
 
 
 @router.patch(

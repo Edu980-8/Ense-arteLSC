@@ -11,6 +11,19 @@ class MedalBase(SQLModel):
     certificate_type: str = Field(default="Completed")
     issuance_date: datetime = Field(default_factory=datetime.utcnow)
 
+class MedalCreate(MedalBase):
+    category_id: uuid.UUID
+    user_id: uuid.UUID
+
+# Properties to return via API, id is always required
+class MedalPublic(MedalBase):
+    id: uuid.UUID
+    category_id: uuid.UUID
+    user_id: uuid.UUID
+
+class MedalsPublic(SQLModel):
+    data: list[MedalPublic]
+    count: int
 
 class Medal(MedalBase, table=True):
     __tablename__ = "medals"

@@ -2,7 +2,7 @@ from sqlmodel import Session
 
 from app.config.security import verify_password
 from app.models import User
-from app.crud.user import get_user_by_email
+from app.crud import get_user_by_email
 
 
 def authenticate(*, session: Session, email: str, password: str) -> User | None:
