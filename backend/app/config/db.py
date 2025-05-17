@@ -37,6 +37,8 @@ def init_db(session: Session) -> None:
         "Pronombres",
     ]
 
+    category_map = {}  # Mapa de nombre de categoría a objeto Category
+
     for category_value in unique_categories:
         existing_category = session.exec(
             select(Category).where(Category.value == category_value)
@@ -47,8 +49,10 @@ def init_db(session: Session) -> None:
                 medal_image_url="https://example.com/medal.png"
             )
             session.add(new_category)
-
-    session.commit()  # Confirmar categorías antes de usarlas en relaciones
+            session.commit()  # commit para obtener ID
+            category_map[category_value] = new_category
+        else:
+            category_map[category_value] = existing_category
 
     # 3. Crear señas iniciales si no existen
     initial_signs = [
@@ -74,15 +78,13 @@ def init_db(session: Session) -> None:
             select(Sign).where(Sign.name == sign_data["name"])
         ).first()
         if not existing_sign:
-            category = session.exec(
-                select(Category).where(Category.value == sign_data["category"])
-            ).first()
+            category = category_map.get(sign_data["category"])
             if category:
                 new_sign = Sign(
                     name=sign_data["name"],
                     description=sign_data["description"],
-                    url_video="https://example.com/video_placeholder.mp4",  # Reemplaza con URL real si la tienes
-                    category=category,
+                    url_video="https://example.com/video_placeholder.mp4",  # Reemplaza con URL real
+                    category_id=category.id
                 )
                 session.add(new_sign)
 

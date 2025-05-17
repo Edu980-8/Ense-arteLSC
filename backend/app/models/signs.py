@@ -4,12 +4,13 @@ import uuid
 from sqlmodel import Field, SQLModel, Relationship
 
 
+from app.models.categories import Category
 if TYPE_CHECKING:
-    from app.models.categories import Category
     from app.models.user_signs import UserSign
 
 
 class SignBase(SQLModel):
+    category_id: uuid.UUID = Field(foreign_key="categories.id")
     name: str = Field(max_length=255)
     description: str | None = None
     url_video: str
@@ -17,6 +18,7 @@ class SignBase(SQLModel):
 # Properties to return via API, id is always required
 class SignPublic(SignBase):
     id: uuid.UUID
+    category: Optional[Category] = None
 
 class SignsPublic(SQLModel):
     data: list[SignPublic]
@@ -25,6 +27,5 @@ class SignsPublic(SQLModel):
 class Sign(SignBase, table=True):
     __tablename__ = "signs"
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-
-category: Optional["Category"] = Relationship(back_populates="signs")
-user_signs: list["UserSign"] = Relationship(back_populates="sign")
+    category: Optional["Category"] = Relationship(back_populates="signs")
+    user_signs: list["UserSign"] = Relationship(back_populates="sign")

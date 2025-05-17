@@ -3,6 +3,7 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import col, delete, func, select
+from sqlalchemy.orm import selectinload
 
 from app import crud
 from app.api.deps import (
@@ -24,7 +25,7 @@ router = APIRouter(prefix="/signs", tags=["signs"])
 
 @router.get(
     "/",
-    dependencies=[Depends(get_current_active_superuser)],
+    # dependencies=[Depends(get_current_active_superuser)],
     response_model=SignsPublic,
 )
 def read_signs(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
@@ -35,7 +36,12 @@ def read_signs(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
     count_statement = select(func.count()).select_from(Sign)
     count = session.exec(count_statement).one()
 
-    statement = select(Sign).offset(skip).limit(limit)
+    statement = (
+        select(Sign)
+        .options(selectinload(Sign.category))  # <-- Esto carga la relación
+        .offset(skip)
+        .limit(limit)
+    )
     signs = session.exec(statement).all()
 
     return SignsPublic(data=signs, count=count)

@@ -34,6 +34,5 @@ class Medal(MedalBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     category_id: uuid.UUID = Field(foreign_key="categories.id")
     user_id: uuid.UUID = Field(foreign_key="users.id", index=True)
-
-user: Optional["User"] = Relationship(back_populates="medals")
-category: Optional["Category"] = Relationship(back_populates="medals")
+    user: Optional["User"] = Relationship(back_populates="medals")  
+    category: Optional["Category"] = Relationship(back_populates="medals")

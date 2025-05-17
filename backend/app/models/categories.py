@@ -15,7 +15,5 @@ class Category(CategoryBase, table=True):
     __tablename__ = "categories"
 
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    
-
-signs: list["Sign"] = Relationship(back_populates="category")
-medals: list["Medal"] = Relationship(back_populates="category")
+    signs: list["Sign"] = Relationship(back_populates="category")
+    medals: list["Medal"] = Relationship(back_populates="category")

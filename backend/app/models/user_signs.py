@@ -19,6 +19,5 @@ class UserSign(UserSignBase, table=True):
 
     sign_id: uuid.UUID = Field(foreign_key="signs.id")
     user_id: uuid.UUID = Field(foreign_key="users.id")
-
-sign: Optional["Sign"] = Relationship(back_populates="user_signs")
-user: Optional["User"] = Relationship(back_populates="user_signs")
+    sign: Optional["Sign"] = Relationship(back_populates="user_signs")
+    user: Optional["User"] = Relationship(back_populates="user_signs")

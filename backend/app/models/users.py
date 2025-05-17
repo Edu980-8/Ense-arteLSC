@@ -48,9 +48,8 @@ class User(UserBase, table=True):
     __tablename__ = "users"
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
-
-user_signs: list["UserSign"] = Relationship(back_populates="user")
-medals: list["Medal"] = Relationship(back_populates="user")
+    user_signs: list["UserSign"] = Relationship(back_populates="user")
+    medals: list["Medal"] = Relationship(back_populates="user")
 
 # Properties to return via API, id is always required
 class UserPublic(UserBase):
