@@ -1,8 +1,8 @@
 import uuid
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel import col, delete, func, select
+from fastapi import APIRouter, Depends
+from sqlmodel import func, select
 
 from app import crud
 from app.api.deps import (
@@ -10,15 +10,12 @@ from app.api.deps import (
     SessionDep,
     get_current_active_superuser,
 )
-from app.config.settings import settings
-from app.config.security import get_password_hash, verify_password
 from app.models import (
     Medal,
     MedalPublic,
     MedalsPublic,
     MedalCreate
 )
-from app.utils.email import generate_new_account_email, send_email
 
 router = APIRouter(prefix="/medals", tags=["medals"])
 
@@ -35,19 +32,17 @@ def create_medal(*, session: SessionDep, medal_in: MedalCreate) -> Any:
     return user
 
 @router.get(
-    "/",
-    dependencies=[Depends(get_current_active_superuser)],
+    "/by-user/{user_id}",
     response_model=MedalsPublic,
+    dependencies=[Depends(get_current_active_superuser)],
 )
-def read_medals(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
+def get_medals_by_user(*, session: SessionDep, user_id: uuid.UUID) -> Any:
     """
-    Retrieve signs.
+    Retrieve all medals for a specific user.
     """
+    statement = select(Medal).where(Medal.user_id == user_id)
+    medals = session.exec(statement).all()
+    count = len(medals)
+    return MedalsPublic(data=medals, count=count)
 
-    count_statement = select(func.count()).select_from(Medal)
-    count = session.exec(count_statement).one()
 
-    statement = select(Medal).offset(skip).limit(limit)
-    signs = session.exec(statement).all()
-
-    return MedalsPublic(data=signs, count=count)

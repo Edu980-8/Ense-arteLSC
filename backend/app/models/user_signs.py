@@ -10,8 +10,11 @@ if TYPE_CHECKING:
 
 
 class UserSignBase(SQLModel):
-    position: int
+    ... 
 
+class UserSignCreate(SQLModel):
+    user_id: uuid.UUID
+    sign_id: uuid.UUID
 
 class UserSign(UserSignBase, table=True):
     __tablename__ = "user_signs"
