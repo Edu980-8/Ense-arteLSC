@@ -1,10 +1,12 @@
 import { useTheme } from "./ThemeContext";
-import { useNavigate, useLocation } from "react-router-dom"; 
+import { useNavigate, useLocation } from "react-router-dom";
+import { logout } from "../../utils/auth";
 
 const secciones = [
   { nombre: "Aprende Señas", icono: "mano_amarilla", path: "/learn" },
   { nombre: "Evalua tu seña", icono: "mano_verde", path: "/practice" },
   { nombre: "Conócenos", icono: "mano_amarilla", path: "/about" },
+  { nombre: "Cerrar Sesión", icono: "cerrar-sesion", path: "/" },
 ];
 
 const isOdd = (number) => number % 2 !== 0;
@@ -13,6 +15,11 @@ const VerticalNavBar = () => {
   const navigate = useNavigate();
   const location = useLocation(); // Obtén la ruta actual
   const { theme } = useTheme();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login"); // Redirige al login
+  };
 
   return (
     <div
@@ -41,10 +48,10 @@ const VerticalNavBar = () => {
                 }}
               >
                 <img
-                  src={`./assets/${seccion.icono}.svg`}
+                  src={`./assets/${seccion.icono=="cerrar-sesion" ? "cerrar-sesion.png" : seccion.icono+".svg"}`}
                   alt={seccion.nombre}
-                  className="w-[44.88px] h-[41.12px]"
-                  onClick={() => navigate(seccion.path)}
+                  className="size-[40px]"
+                  onClick={seccion.nombre == "Cerrar Sesión" ? handleLogout : () => navigate(seccion.path)}
                 />
                 <span className="text-[#ffffff]">{seccion.nombre}</span>
               </li>

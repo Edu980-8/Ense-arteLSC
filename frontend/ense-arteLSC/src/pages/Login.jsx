@@ -3,6 +3,43 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [mode, setMode] = useState("login");
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+
+const handleLogin = async () => {
+  try {
+    const response = await fetch("http://localhost:8000/api/v1/login/access-token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        username: email,
+        password: password,
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || "Error al iniciar sesión");
+    }
+
+    const data = await response.json();
+    console.log("🔐 Token recibido:", data.access_token);
+
+    // Puedes guardar el token si quieres:
+    localStorage.setItem("token", data.access_token);
+
+    // Redirige a la página deseada
+    navigate("/learn");
+  } catch (error) {
+    console.error("❌ Error de login:", error.message);
+    alert("Credenciales incorrectas");
+  }
+};
+
+
   return (
     <div className="flex flex-col justify-center items-center gap-[41px] mt-[100px] ">
       <img
@@ -56,6 +93,8 @@ const Login = () => {
               type="text"
               placeholder="Email"
               className="border-b-[#2241A0] border-b-[1px] pb-2 focus:outline-none"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <img src="" alt="" />
           </div>
@@ -65,6 +104,8 @@ const Login = () => {
               type="password"
               placeholder="Password"
               className="border-b-[#2241A0] border-b-[1px] pb-2 focus:outline-none"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <img src="" alt="" />
           </div>
@@ -76,6 +117,8 @@ const Login = () => {
               type="text"
               placeholder="Nombre"
               className="border-b-[#2241A0] border-b-[1px] pb-2 focus:outline-none"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
             <img src="" alt="" />
           </div>
@@ -85,6 +128,8 @@ const Login = () => {
               type="text"
               placeholder="Email"
               className="border-b-[#2241A0] border-b-[1px] pb-2 focus:outline-none"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <img src="" alt="" />
           </div>
@@ -94,6 +139,8 @@ const Login = () => {
               type="password"
               placeholder="Contraseña"
               className="border-b-[#2241A0] border-b-[1px] pb-2 focus:outline-none"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <img src="" alt="" />
           </div>
@@ -105,7 +152,7 @@ const Login = () => {
       </div>
 
       <button className="bg-[#2241A0] text-white text-[1rem] rounded-[5px] py-[1rem] px-[48px] cursor-pointer"
-        onClick={() => navigate("/learn")}>
+        onClick={handleLogin}>
         {mode === "login" ? "INICIAR SESIÓN" : "REGISTRARSE"} 
       </button>
     </div>
