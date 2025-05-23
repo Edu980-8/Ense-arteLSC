@@ -1,0 +1,11 @@
+VIDEO_DIR = r"C:\\Users\\Eduard_PC\\OneDrive\\Escritorio\\VIDEOS\\VIDEOS\\COLOR_BODY"
+MODEL_NAME = "google/vivit-b-16x2-kinetics400"
+NUM_FRAMES = 32
+IMG_SIZE = (224, 224)
+EPOCHS = 50
+BATCH_SIZE = 1
+TRAIN_SPLIT = 0.7
+VAL_SPLIT = 0.2
+SEED = 42
+CHECKPOINT_DIR = "./vivit_sign_checkpoints"
+FINAL_MODEL_DIR = "./vivit_sign_final"
