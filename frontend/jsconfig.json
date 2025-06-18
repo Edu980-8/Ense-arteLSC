@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src", "ense-arteLSC/src/components/badge.jsx", "ense-arteLSC/src/components/card.jsx", "ense-arteLSC/src/components/progress.jsx"]
+}
