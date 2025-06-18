@@ -54,7 +54,7 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="flex justify-center items-center w-[661px] h-[491px]">
+        <div className="flex justify-center items-center w-[270px] h-[491px] mx-auto">
           <video
             className="w-full h-full rounded-lg shadow-lg"
             controls
@@ -63,7 +63,7 @@ const Home = () => {
             loop
           >
             <source
-              src="https://drive.google.com/uc?export=download&id=1sH8KvPM-RFcIB168iaWWLAOX6xCPeQku"
+              src="../../assets/Presentacion.mp4"
               type="video/mp4"
             />
             Tu navegador no soporta el elemento de video.

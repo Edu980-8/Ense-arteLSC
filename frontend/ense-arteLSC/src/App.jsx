@@ -6,6 +6,7 @@ import Learning from "./pages/Learning.jsx";
 import Practice from "./pages/Practice.jsx";
 import { ThemeProvider } from "./components/ThemeContext.jsx";
 import AboutUs from "./pages/AboutUs.jsx";
+import Dashboard from "./components/DashboardComponent/DashboardComponent.jsx"
 import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
@@ -15,10 +16,38 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/learn" element={
-            <PrivateRoute><Learning /></PrivateRoute>}  />
-          <Route path="/practice" element={<PrivateRoute><Practice /></PrivateRoute>} />
-          <Route path="/about" element={<PrivateRoute><AboutUs /></PrivateRoute>} />
+          <Route
+            path="/learn"
+            element={
+              <PrivateRoute>
+                <Learning />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/practice"
+            element={
+              <PrivateRoute>
+                <Practice />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/about"
+            element={
+              <PrivateRoute>
+                <AboutUs />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/scores"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </Router>
     </ThemeProvider>

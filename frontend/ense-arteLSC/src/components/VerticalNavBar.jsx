@@ -6,6 +6,7 @@ const secciones = [
   { nombre: "Aprende Señas", icono: "mano_amarilla", path: "/learn" },
   { nombre: "Evalua tu seña", icono: "mano_verde", path: "/practice" },
   { nombre: "Conócenos", icono: "mano_amarilla", path: "/about" },
+  {nombre: "Puntuaciones", icono: "mano_verde", path: "/scores"},
   { nombre: "Cerrar Sesión", icono: "cerrar-sesion", path: "/" },
 ];
 
