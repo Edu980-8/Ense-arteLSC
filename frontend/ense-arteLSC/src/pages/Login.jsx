@@ -7,38 +7,67 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-const handleLogin = async () => {
-  try {
-    const response = await fetch("http://localhost:8000/api/v1/login/access-token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        username: email,
-        password: password,
-      }),
-    });
+  const handleLogin = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8000/api/v1/login/access-token",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            username: email,
+            password: password,
+          }),
+        }
+      );
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.detail || "Error al iniciar sesión");
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || "Error al iniciar sesión");
+      }
+
+      const data = await response.json();
+      console.log("🔐 Token recibido:", data.access_token);
+
+      // Puedes guardar el token si quieres:
+      localStorage.setItem("token", data.access_token);
+
+      // Redirige a la página deseada
+      navigate("/learn");
+    } catch (error) {
+      console.error("❌ Error de login:", error.message);
+      alert("Credenciales incorrectas");
     }
+  };
 
-    const data = await response.json();
-    console.log("🔐 Token recibido:", data.access_token);
+  const handleRegister = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/api/v1/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          password: password,
+        }),
+      });
 
-    // Puedes guardar el token si quieres:
-    localStorage.setItem("token", data.access_token);
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || "Error al iniciar sesión");
+      }
 
-    // Redirige a la página deseada
-    navigate("/learn");
-  } catch (error) {
-    console.error("❌ Error de login:", error.message);
-    alert("Credenciales incorrectas");
-  }
-};
-
+      setMode("login");
+    
+    } catch (error) {
+      console.error("❌ Error de login:", error.message);
+      alert("Credenciales incorrectas");
+    }
+  };
 
   return (
     <div className="flex flex-col justify-center items-center gap-[41px] mt-[100px] ">
@@ -148,12 +177,16 @@ const handleLogin = async () => {
       )}
 
       <div>
-        <p className="text-[#2241A0] cursor-pointer">¿Olvidaste tu contrasena?</p>
+        <p className="text-[#2241A0] cursor-pointer">
+          ¿Olvidaste tu contrasena?
+        </p>
       </div>
 
-      <button className="bg-[#2241A0] text-white text-[1rem] rounded-[5px] py-[1rem] px-[48px] cursor-pointer"
-        onClick={handleLogin}>
-        {mode === "login" ? "INICIAR SESIÓN" : "REGISTRARSE"} 
+      <button
+        className="bg-[#2241A0] text-white text-[1rem] rounded-[5px] py-[1rem] px-[48px] cursor-pointer"
+        onClick={mode === "login" ? handleLogin : handleRegister}
+      >
+        {mode === "login" ? "INICIAR SESIÓN" : "REGISTRARSE"}
       </button>
     </div>
   );
