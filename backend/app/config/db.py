@@ -56,21 +56,16 @@ def init_db(session: Session) -> None:
 
     # 3. Crear señas iniciales si no existen
     initial_signs = [
-        {"name": "MAMÁ", "category": "Familia", "description": "Descripción del curso 1"},
-        {"name": "PAPÁ", "category": "Familia", "description": "Descripción del curso 2"},
-        {"name": "JUGAR", "category": "Actividades", "description": "Descripción del curso 3"},
-        {"name": "COMER", "category": "Necesidades", "description": "Descripción del curso 3"},
+        {"name": "BIEN", "category": "Emociones", "description": "Descripción del curso 3"},
+        {"name": "¿COMO ESTAS?", "category": "Emociones", "description": "Descripción del curso 3"},        
         {"name": "HAMBRE", "category": "Necesidades", "description": "Descripción del curso 3"},
-        {"name": "FELIZ", "category": "Emociones", "description": "Descripción del curso 3"},
-        {"name": "TRISTE", "category": "Emociones", "description": "Descripción del curso 3"},
         {"name": "HOLA", "category": "Sociales", "description": "Descripción del curso 3"},
-        {"name": "GRACIAS", "category": "Sociales", "description": "Descripción del curso 3"},
-        {"name": "YO", "category": "Pronombres", "description": "Descripción del curso 3"},
-        {"name": "TÚ", "category": "Pronombres", "description": "Descripción del curso 3"},
-        {"name": "ABUELO", "category": "Familia", "description": "Descripción del curso 3"},
-        {"name": "TE AMO", "category": "Sociales", "description": "Descripción del curso 3"},
-        {"name": "SED", "category": "Necesidades", "description": "Descripción del curso 3"},
+        {"name": "ADIOS", "category": "Sociales", "description": "Descripción del curso 3"},
         {"name": "POR FAVOR", "category": "Sociales", "description": "Descripción del curso 3"},
+        {"name": "COMER", "category": "Necesidades", "description": "Descripción del curso 3"},
+        {"name": "ABUELO", "category": "Familia", "description": "Descripción del curso 3"},
+        {"name": "NIÑO", "category": "Sociales", "description": "Descripción del curso 3"},
+        {"name": "NIÑA", "category": "Sociales", "description": "Descripción del curso 3"},        
     ]
 
     for sign_data in initial_signs:
