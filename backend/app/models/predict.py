@@ -4,11 +4,9 @@ import uuid
 from sqlmodel import Field, SQLModel, Relationship
 
 
-from app.models.categories import Category
-
-class PredcitItem():
-    sign : str
-    probability: float
+class PredcitItem(SQLModel):
+    label : str
+    score: float
 
 
 class PredictBase(SQLModel):
