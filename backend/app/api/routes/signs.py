@@ -89,7 +89,7 @@ def assign_sign_to_user(*, session: SessionDep, user_sign_in: UserSignCreate) ->
     ).first()
 
     if existing:
-        return existing  # o lanzar error si no deseas duplicados
+        return existing
 
     user_sign = UserSign(**user_sign_in.model_dump())
     session.add(user_sign)
